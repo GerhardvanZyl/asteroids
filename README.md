@@ -6,8 +6,11 @@ My first attempt at creating a game in Unity, and probably contains plenty of ba
 Built using Unity  2019.4 16f1.
 
 Requires these free assets to be downloaded separately:
+
 Asteroids Pack
+
 https://assetstore.unity.com/packages/3d/environments/asteroids-pack-84988
+
 /Assets/Asteroids Pack
 
 Hi-Rez Spaceships Creator Free Sample
