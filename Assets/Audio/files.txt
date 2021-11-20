@@ -1,0 +1,26 @@
+Audio from:
+https://assetstore.unity.com/packages/audio/sound-fx/retro-sfx-sound-pack-177299
+https://godotmarketplace.com/shop/chiptunes-pro-music-sfx-pack/
+
+(or the humble bundle containing those tow packs)
+
+Explosion.mp3
+Explosion.mp3.meta
+files.txt
+files.txt.meta
+Lazer.mp3
+Lazer.mp3.meta
+SFX_explosion1.wav
+SFX_explosion1.wav.meta
+SFX_explosion2.wav
+SFX_explosion2.wav.meta
+SFX_explosion3.wav
+SFX_explosion3.wav.meta
+SFX_explosion4.wav
+SFX_explosion4.wav.meta
+SFX_explosion5.wav
+SFX_explosion5.wav.meta
+SFX_shot4.wav
+SFX_shot4.wav.meta
+YetAnotherJourney(loop)(120).mp3
+YetAnotherJourney(loop)(120).mp3.meta
