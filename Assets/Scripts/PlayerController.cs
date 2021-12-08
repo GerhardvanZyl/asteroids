@@ -3,6 +3,7 @@ using Assets.Scripts.Constants;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DigitalRubyShared;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,14 +16,22 @@ public class PlayerController : MonoBehaviour
     public float fireRate = 0.5f;
     public AudioClip lazerSound;
 
+    /// <summary>
+    /// DPad script
+    /// </summary>
+    [Tooltip("Fingers DPad Script")]
+    public FingersDPadScript DPadScript;
+
     private AudioSource playerAudio;
     private Rigidbody playerRb;
     private float ttLazer = 0f;
     private Quaternion initialRotation;
 
+    private TapGestureRecognizer tapGesture;
+
     private void OnEnable()
     {
-        GameManager.OnGameOverConfirmed += OnGameOverConfirmed;
+        GameManager.OnGameOverConfirmed += OnGameOverConfirmed; 
         GameManager.OnGameStarted += OnGameStarted;
     }
 
@@ -44,12 +53,43 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        DPadScript.DPadItemTapped = DPadTapped;
+        DPadScript.DPadItemPanned = DPadPanned;
+    }
+
+    private void DPadTapped(FingersDPadScript script, FingersDPadItem item, TapGestureRecognizer gesture)
+    {
+        //if((item & FingersDPadItem.Center) != FingersDPadItem.None)
+        //{
+        //    // Center tap - do nothing
+        //}
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         playerAudio = GetComponent<AudioSource>();
         initialRotation = playerRb.rotation;
+
+        // setup gestures
+        tapGesture = new TapGestureRecognizer { MaximumNumberOfTouchesToTrack = 1 };
+        tapGesture.StateUpdated += TapGesture_StateUpdated;
+        FingersScript.Instance.AddGesture(tapGesture);
+    }
+
+    private void TapGesture_StateUpdated(GestureRecognizer gesture)
+    {
+        //Debug.LogFormat("Single tap state: {0}", gesture.State);
+        //if (gesture.State == GestureRecognizerState.Ended)
+        //{
+        //    string msg = string.Format("Single tap at {0},{1}", gesture.FocusX, gesture.FocusY);
+        //    Debug.Log(msg);
+
+        //    FireWeapon();
+        //}
     }
 
     // Update is called once per frame
@@ -57,8 +97,16 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver) return;
 
-        HandleMovement();
-        HandleWeapons();
+        var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
+        HandleMovement(horizontalInput, verticalInput);
+
+        ttLazer -= Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Handle weapons - Space pressed");
+            FireWeapon();
+        }
     }
 
     private void OnCollisionEnter(Collision other)
@@ -72,11 +120,54 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleMovement()
+    /// <summary>
+    /// Callback for tap gesture
+    /// </summary>
+    /// <param name="gesture">Tap gesture</param>
+    public void FireButtonTapped(DigitalRubyShared.GestureRecognizer gesture)
     {
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
+        Debug.LogFormat("Single tap state: {0}", gesture.State);
+        if (gesture.State == GestureRecognizerState.Ended)
+        {
+            string msg = string.Format("Single tap at {0},{1}", gesture.FocusX, gesture.FocusY);
+            Debug.Log(msg);
 
+            FireWeapon();
+        }
+    }
+
+    private void DPadPanned(FingersDPadScript script, FingersDPadItem item, PanGestureRecognizer gesture)
+    {
+        Debug.Log($"DPad panned: {(FingersDPadItem)item}");
+        float horizontalInput = 0;
+        float verticalInput = 0;
+
+        if((item & FingersDPadItem.Right) != FingersDPadItem.None)
+        {
+            horizontalInput = 1;
+        }
+
+        if ((item & FingersDPadItem.Left) != FingersDPadItem.None)
+        {
+            horizontalInput = -1;
+        }
+
+        if ((item & FingersDPadItem.Up) != FingersDPadItem.None)
+        {
+            verticalInput = 1;
+        }
+
+        if ((item & FingersDPadItem.Down) != FingersDPadItem.None)
+        {
+            verticalInput = -1;
+        }
+
+        Debug.Log($"Calling Handle Movement. H: {horizontalInput} V: {verticalInput} ");
+        HandleMovement(horizontalInput, verticalInput);
+    }
+
+    private void HandleMovement(float horizontalInput, float verticalInput)
+    {
         // fix any accidental rotation caused by collisions
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
 
@@ -91,13 +182,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleWeapons()
+    private void FireWeapon()
     {
-        ttLazer -= Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space) && ttLazer <= 0)
+        if (ttLazer <= 0)
         {
-            Instantiate(lazerPrefab, transform.position, transform.rotation );
+            Instantiate(lazerPrefab, transform.position, transform.rotation);
             ttLazer = fireRate;
             playerAudio.PlayOneShot(lazerSound, 0.5f);
         }

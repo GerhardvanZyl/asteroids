@@ -63,3 +63,4 @@ crashlytics-build.properties
 # Project specific excludes
 /[Aa]ssets/[Aa]steroids [Pp]ack
 /[Aa]ssets/[Ss]pace [Ss]hips
+/[Aa]ssets/[Ff]ingers
