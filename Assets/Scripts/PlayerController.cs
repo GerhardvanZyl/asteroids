@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
     public delegate void PlayerDelegate();
     public static event PlayerDelegate OnPlayerDied;
 
+    public delegate void AccelerationDelegate();
+    public static event AccelerationDelegate OnAccelerationStart;
+    public static event AccelerationDelegate OnAccelerationEnd;
+
     public float thrustMultiplier = 10f;
     public float rotationMultiplier = 1f;
     public GameObject lazerPrefab;
@@ -168,6 +172,15 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement(float horizontalInput, float verticalInput)
     {
+        if(verticalInput > 0)
+        {
+            OnAccelerationStart();
+        }
+        else
+        {
+            OnAccelerationEnd();
+        }
+
         // fix any accidental rotation caused by collisions
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
 

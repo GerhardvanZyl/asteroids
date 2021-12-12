@@ -2,9 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isFpsVisible;
+    public bool isMobileMode = true;
+
+    public GameObject Dpad;
+    public GameObject FireButton;
+
+    [SerializeField] private Text fpsText;
+    [SerializeField] private float hudRefreshRate = 1f;
+
+    private float timer;
+
     public delegate void GameDelegate();
     public static event GameDelegate OnGameStarted;
     public static event GameDelegate OnGameOverConfirmed;
@@ -32,6 +44,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GM awakens");
         Instance = this;
+        SetHighScore();
+
+        fpsText.enabled = isFpsVisible;
+        Dpad.SetActive(isMobileMode);
+        FireButton.SetActive(isMobileMode);        
     }
 
     private void OnEnable()
@@ -44,6 +61,16 @@ public class GameManager : MonoBehaviour
     {
         PlayerController.OnPlayerDied -= OnPlayerDied;
         AsteroidController.OnAsteroidDestroyed -= OnAsteroidDestroyed;
+    }
+
+    void Update()
+    {
+        if (isFpsVisible && Time.unscaledTime > timer)
+        {
+            int fps = (int)(1f / Time.unscaledDeltaTime);
+            fpsText.text = fps + " FPS on " + SceneManager.GetActiveScene().path;
+            timer = Time.unscaledTime + hudRefreshRate;
+        }
     }
 
     void SetPageState(PageState state)
@@ -70,17 +97,25 @@ public class GameManager : MonoBehaviour
     private void OnPlayerDied() 
     {
         gameOver = true;
+        
+        SetHighScore();
+
+        SetPageState(PageState.GameOver);
+    }
+
+    private void SetHighScore()
+    {
         int savedScore = PlayerPrefs.GetInt("HighScore");
 
-        if( score > savedScore)
+        if (score > savedScore)
         {
             savedScore = score;
             PlayerPrefs.SetInt("HighScore", score);
         }
 
         highScoreText.text = "High Score: " + savedScore.ToString();
-        SetPageState(PageState.GameOver);
     }
+
 
     private void OnAsteroidDestroyed() 
     {

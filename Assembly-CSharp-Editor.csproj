@@ -677,6 +677,18 @@
       <Project>{EB6E015D-24C9-CCC0-5358-232297CE01A9}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEngine.Monetization.csproj">
+      <Project>{1D006F05-5991-5F76-5CB9-32A8E19AFB89}</Project>
+      <Name>UnityEngine.Monetization</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Advertisements.csproj">
+      <Project>{10CE695E-2BD2-5BFC-5D86-E3C66A1F5390}</Project>
+      <Name>UnityEngine.Advertisements</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Advertisements.Editor.csproj">
+      <Project>{61BB2174-48DE-263A-52F1-B721941E4506}</Project>
+      <Name>UnityEngine.Advertisements.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

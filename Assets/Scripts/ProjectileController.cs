@@ -8,7 +8,7 @@ public class ProjectileController : MonoBehaviour
 
     public float speed = 200f;
     public float growthRatio = 2f;
-    public float lifetime = 2f;
+    public float lifetime = 1.5f;
 
     // Start is called before the first frame update
     void Start()
