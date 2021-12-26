@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.ConstantsAndEnums;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,7 +43,7 @@ public class EngineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.IsGameOver)
+        if (GameManager.Instance.State != GameState.Running)
         {
             foreach (var particle in particles)
             {

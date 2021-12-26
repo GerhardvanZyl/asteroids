@@ -1,6 +1,4 @@
 ﻿using Assets.Scripts.Configuration;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WrapAroundController : MonoBehaviour

@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.Configuration;
-using Assets.Scripts.Constants;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.ConstantsAndEnums;
 using System.Linq;
 using UnityEngine;
 
@@ -57,7 +55,7 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!game.IsGameOver)
+        if (GameManager.Instance.State == GameState.Running)
         {
             ttSpawn -= Time.deltaTime;
 
@@ -69,12 +67,6 @@ public class SpawnManager : MonoBehaviour
                 SpawnAsteroid();
             }
         }
-
-        // For testing
-        //if(Input.GetKeyDown(KeyCode.T))
-        //{
-        //    SpawnAsteroid();
-        //}
     }
 
     private void SpawnAsteroid()

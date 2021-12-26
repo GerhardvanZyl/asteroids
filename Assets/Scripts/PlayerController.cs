@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts.Configuration;
-using Assets.Scripts.Constants;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DigitalRubyShared;
+using Assets.Scripts.ConstantsAndEnums;
 
 public class PlayerController : MonoBehaviour
 {
@@ -35,13 +33,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnGameOverConfirmed += OnGameOverConfirmed; 
         GameManager.OnGameStarted += OnGameStarted;
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameOverConfirmed -= OnGameOverConfirmed;
         GameManager.OnGameStarted -= OnGameStarted;
     }
 
@@ -52,23 +48,10 @@ public class PlayerController : MonoBehaviour
         playerRb.rotation = initialRotation;
     }
 
-    void OnGameOverConfirmed()
-    {
-
-    }
 
     private void Awake()
     {
-        DPadScript.DPadItemTapped = DPadTapped;
         DPadScript.DPadItemPanned = DPadPanned;
-    }
-
-    private void DPadTapped(FingersDPadScript script, FingersDPadItem item, TapGestureRecognizer gesture)
-    {
-        //if((item & FingersDPadItem.Center) != FingersDPadItem.None)
-        //{
-        //    // Center tap - do nothing
-        //}
     }
 
     // Start is called before the first frame update
@@ -80,26 +63,13 @@ public class PlayerController : MonoBehaviour
 
         // setup gestures
         tapGesture = new TapGestureRecognizer { MaximumNumberOfTouchesToTrack = 1 };
-        tapGesture.StateUpdated += TapGesture_StateUpdated;
         FingersScript.Instance.AddGesture(tapGesture);
-    }
-
-    private void TapGesture_StateUpdated(GestureRecognizer gesture)
-    {
-        //Debug.LogFormat("Single tap state: {0}", gesture.State);
-        //if (gesture.State == GestureRecognizerState.Ended)
-        //{
-        //    string msg = string.Format("Single tap at {0},{1}", gesture.FocusX, gesture.FocusY);
-        //    Debug.Log(msg);
-
-        //    FireWeapon();
-        //}
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.IsGameOver) return;
+        if (GameManager.Instance.State != GameState.Running) return;
 
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
@@ -118,9 +88,6 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag(Tags.ASTEROID))
         {
             OnPlayerDied();
-
-            // Render explosion
-            // Destroy(gameObject);
         }
     }
 

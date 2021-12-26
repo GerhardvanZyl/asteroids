@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.Configuration;
-using Assets.Scripts.Constants;
-using System.Collections;
+﻿using Assets.Scripts.ConstantsAndEnums;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
