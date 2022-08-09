@@ -180,6 +180,9 @@ public class GameManager : MonoBehaviour
         score = 0;
         scoreText.ForEach( x=> x.text = score.ToString());
         OnGameStarted();
+
+        // For restarting, what we want to do it
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ResumeGame()

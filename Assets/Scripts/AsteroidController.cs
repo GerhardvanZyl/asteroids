@@ -10,8 +10,6 @@ public class AsteroidController : MonoBehaviour
     private List<MeshCollider> childColliders = new List<MeshCollider>();
     private float asteroidRadius;
     private float initialY = 1f;
-    private ParticleSystem dustParticles;
-
 
     public delegate void AsteroidDelegate();
     public static event AsteroidDelegate OnAsteroidDestroyed;
@@ -54,7 +52,7 @@ public class AsteroidController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void fixedUpdate()
     {
         // just make sure not vertical movement.
         transform.position = new Vector3(transform.position.x, initialY, transform.position.z);
@@ -83,8 +81,11 @@ public class AsteroidController : MonoBehaviour
             var explosionAudio = explosionClips[randomClipIndex];
             
             AudioSource.PlayClipAtPoint(explosionAudio, transform.position, 0.35f);
+
+            // Will be released from the queue when the projectile life expires
+            other.gameObject.SetActive(false);
+            
             BreakApart();
-            Destroy(other.gameObject);
         }
     }
 
