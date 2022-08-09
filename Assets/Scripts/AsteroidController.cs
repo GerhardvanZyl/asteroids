@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.ConstantsAndEnums;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,8 +11,6 @@ public class AsteroidController : MonoBehaviour
     private List<MeshCollider> childColliders = new List<MeshCollider>();
     private float asteroidRadius;
     private float initialY = 1f;
-    private ParticleSystem dustParticles;
-
 
     public delegate void AsteroidDelegate();
     public static event AsteroidDelegate OnAsteroidDestroyed;
@@ -54,10 +53,8 @@ public class AsteroidController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        // just make sure not vertical movement.
-        transform.position = new Vector3(transform.position.x, initialY, transform.position.z);
         var colliders = Physics.OverlapSphere(transform.position, asteroidRadius);
 
         collidesWith = colliders;
@@ -83,8 +80,11 @@ public class AsteroidController : MonoBehaviour
             var explosionAudio = explosionClips[randomClipIndex];
             
             AudioSource.PlayClipAtPoint(explosionAudio, transform.position, 0.35f);
+
+            SpawnManager.Instance.KillLazer(other.gameObject.GetComponent<ProjectileController>());
+            
             BreakApart();
-            Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
 
@@ -101,8 +101,7 @@ public class AsteroidController : MonoBehaviour
                     );
             }
         }
-
-        Destroy(gameObject);
+       
     }
 
     private void InitDrift()

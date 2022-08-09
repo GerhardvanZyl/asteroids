@@ -2,24 +2,38 @@
 using Assets.Scripts.ConstantsAndEnums;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class SpawnManager : MonoBehaviour
 {
-    public float spawnInterval = 20f;
-    public float spawnIntervalAdjustment = 1f;
-    public GameObject asteroid;
+    public delegate void SpawnDelegate();
+    public static SpawnManager Instance;
+
+    [SerializeField] float spawnInterval = 20f;
+    [SerializeField] float spawnIntervalAdjustment = 1f;
+    [SerializeField] GameObject asteroid;
+    [SerializeField] GameObject player;
+    
+    [SerializeField] ProjectileController lazerPrefab;
+    private ObjectPool<ProjectileController> lazerPool;
 
     private GameManager game;
     private float ttSpawn;
     private float currentSpawnInterval;
     private Vector3 spawnLocation1 = new Vector3(Config.XMin + 10, 1, Config.ZMin + 10);
     private Vector3 spawnLocation2 = new Vector3(Config.XMax - 10, 1, Config.ZMax - 10);
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         game = GameManager.Instance;
         ttSpawn = spawnInterval;
+
+        initPools();
     }
 
     private void OnEnable()
@@ -69,6 +83,39 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    public void FireLazer()
+    {
+        var lazer = lazerPool.Get();
+    }
+
+    public void KillLazer(ProjectileController lazerInstance)
+    {
+        // It can be deactivated from multiple asteroids if it hits them all at the same time.
+        // So check that it's active before releasing so that we don't release the same object multiple times
+        if(lazerInstance.isActiveAndEnabled) lazerPool.Release(lazerInstance);
+    }
+
+    private void initPools()
+    {
+        lazerPool = new ObjectPool<ProjectileController>(() => {
+            return Instantiate(lazerPrefab);
+        },
+        lazer => {
+            lazer.gameObject.SetActive(true);
+            lazer.transform.position = player.transform.position;
+            lazer.transform.rotation = player.transform.rotation;
+        },
+        lazer => {
+            lazer.gameObject.SetActive(false);
+            lazer.Rgdbody.velocity = Vector3.zero;
+            lazer.Rgdbody.angularVelocity = Vector3.zero;
+        }, lazer => {
+            Destroy(lazer.gameObject);
+        }, false, 4, 4);
+
+        // TODO: for another time, create pools for the asteroids and their explosions.
+    }
+
     private void SpawnAsteroid()
     {
         // initial spawn
@@ -91,6 +138,5 @@ public class SpawnManager : MonoBehaviour
 
         Instantiate(asteroid, spawnLocation, transform.rotation);
     }
-
 
 }

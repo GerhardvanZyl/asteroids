@@ -15,8 +15,11 @@ public class PlayerController : MonoBehaviour
     public float thrustMultiplier = 10f;
     public float rotationMultiplier = 1f;
     public GameObject lazerPrefab;
+    
     public float fireRate = 0.5f;
     public AudioClip lazerSound;
+
+    private Rigidbody rgdbody;
 
     /// <summary>
     /// DPad script
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        rgdbody = GetComponent<Rigidbody>();
         DPadScript.DPadItemPanned = DPadPanned;
     }
 
@@ -78,7 +82,6 @@ public class PlayerController : MonoBehaviour
         ttLazer -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Handle weapons - Space pressed");
             FireWeapon();
         }
     }
@@ -164,9 +167,23 @@ public class PlayerController : MonoBehaviour
 
     private void FireWeapon()
     {
+        
         if (ttLazer <= 0)
         {
-            Instantiate(lazerPrefab, transform.position, transform.rotation);
+            SpawnManager.Instance.FireLazer();
+
+            // Using pooled objects instead, don't instantiate
+            // Instantiate(lazerPrefab, transform.position, transform.rotation);
+            // var lazer = ObjectPooler.Instance.GetPooledObject();
+
+
+
+            //if (lazer != null)
+            //{
+            //    lazer.SetActive(true);
+            //    lazer.transform.position = transform.position; // Position at player position.
+            //}
+
             ttLazer = fireRate;
             playerAudio.PlayOneShot(lazerSound, 0.5f);
         }
