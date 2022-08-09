@@ -16,6 +16,6 @@ namespace Assets.Scripts.Configuration
 
         public static readonly Vector3 StartPosition = new Vector3(0, 1, 0);
 
-        public const string GameId = "";
+        public const string GameId = "4525573";
     }
 }
