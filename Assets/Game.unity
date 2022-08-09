@@ -904,13 +904,12 @@ GameObject:
   m_Component:
   - component: {fileID: 415419149}
   - component: {fileID: 415419148}
-  - component: {fileID: 415419150}
   m_Layer: 0
   m_Name: SpawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &415419148
 MonoBehaviour:
@@ -930,8 +929,6 @@ MonoBehaviour:
   player: {fileID: 467299549}
   lazerPrefab: {fileID: 6791013782402025745, guid: ba54d8b946e238740b0f04488824f279,
     type: 3}
-  explosionPrefab: {fileID: 6662172318634446463, guid: 41121cfff8851404d9875f34f3a67133,
-    type: 3}
 --- !u!4 &415419149
 Transform:
   m_ObjectHideFlags: 0
@@ -947,22 +944,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &415419150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415419147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45c0e1f24e2ce4a5b9bf1f3a7499cd45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pooledObjects: []
-  objectToPool: {fileID: 6662172318634446456, guid: 41121cfff8851404d9875f34f3a67133,
-    type: 3}
-  amountToPool: 20
 --- !u!1 &424982915
 GameObject:
   m_ObjectHideFlags: 0
@@ -15046,19 +15027,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2138933437}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2138933439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467299549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45c0e1f24e2ce4a5b9bf1f3a7499cd45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pooledObjects: []
-  objectToPool: {fileID: 7838057266376510505, guid: ba54d8b946e238740b0f04488824f279,
-    type: 3}
-  amountToPool: 2

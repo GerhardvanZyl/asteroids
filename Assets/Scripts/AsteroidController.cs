@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.ConstantsAndEnums;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,10 +53,8 @@ public class AsteroidController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void fixedUpdate()
+    void FixedUpdate()
     {
-        // just make sure not vertical movement.
-        transform.position = new Vector3(transform.position.x, initialY, transform.position.z);
         var colliders = Physics.OverlapSphere(transform.position, asteroidRadius);
 
         collidesWith = colliders;
@@ -82,10 +81,10 @@ public class AsteroidController : MonoBehaviour
             
             AudioSource.PlayClipAtPoint(explosionAudio, transform.position, 0.35f);
 
-            // Will be released from the queue when the projectile life expires
-            other.gameObject.SetActive(false);
+            SpawnManager.Instance.KillLazer(other.gameObject.GetComponent<ProjectileController>());
             
             BreakApart();
+            Destroy(gameObject);
         }
     }
 
@@ -102,8 +101,7 @@ public class AsteroidController : MonoBehaviour
                     );
             }
         }
-
-        Destroy(gameObject);
+       
     }
 
     private void InitDrift()

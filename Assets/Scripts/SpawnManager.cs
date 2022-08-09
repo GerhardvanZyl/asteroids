@@ -17,9 +17,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] ProjectileController lazerPrefab;
     private ObjectPool<ProjectileController> lazerPool;
 
-    [SerializeField] ParticleSystem explosionPrefab;
-    private ObjectPool<ParticleSystem> explosionPool;
-
     private GameManager game;
     private float ttSpawn;
     private float currentSpawnInterval;
@@ -93,18 +90,9 @@ public class SpawnManager : MonoBehaviour
 
     public void KillLazer(ProjectileController lazerInstance)
     {
-        lazerPool.Release(lazerInstance);
-    }
-
-    public void SpawnExplosion(GameObject asteroid)
-    {
-        var explosion = explosionPool.Get();
-
-    }
-
-    public void KillExplosion(ParticleSystem explosion)
-    {
-        explosionPool.Release(explosion);
+        // It can be deactivated from multiple asteroids if it hits them all at the same time.
+        // So check that it's active before releasing so that we don't release the same object multiple times
+        if(lazerInstance.isActiveAndEnabled) lazerPool.Release(lazerInstance);
     }
 
     private void initPools()
@@ -125,17 +113,7 @@ public class SpawnManager : MonoBehaviour
             Destroy(lazer.gameObject);
         }, false, 4, 4);
 
-        explosionPool = new ObjectPool<ParticleSystem>(() => {
-            return Instantiate(explosionPrefab);
-        },
-        explosion => {
-            explosion.gameObject.SetActive(true);
-        },
-        explosion => {
-            explosion.gameObject.SetActive(false);
-        }, explosion => {
-            Destroy(explosion);
-        }, false, 1, 2);
+        // TODO: for another time, create pools for the asteroids and their explosions.
     }
 
     private void SpawnAsteroid()
@@ -160,6 +138,5 @@ public class SpawnManager : MonoBehaviour
 
         Instantiate(asteroid, spawnLocation, transform.rotation);
     }
-
 
 }

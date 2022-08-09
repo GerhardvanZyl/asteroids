@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{3EA5169F-7459-63CD-8E5C-1E28FF4F7D84}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -88,6 +87,7 @@
     <Compile Include="Assets\Fingers\Prefab\Script\Gestures\GestureRecognizer.cs" />
     <Compile Include="Assets\Scripts\Ads\DisplayAd.cs" />
     <Compile Include="Assets\Fingers\Prefab\Script\Components\FingersDragDropComponentScript.cs" />
+    <Compile Include="Assets\Scripts\KillMe.cs" />
     <Compile Include="Assets\Fingers\Prefab\Script\Components\FingersMultiDragComponentScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Configuration\Configuration.cs" />
@@ -793,7 +793,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
